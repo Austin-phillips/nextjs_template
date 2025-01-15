@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionProvider from "./context/SessionProvider";
 import { getServerSession } from "next-auth";
 import NavMenu from "@/app/ui/nav/NavMenu";
+import { UserProvider } from "./context/UserProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +33,12 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider session={session}>
-          <main>
-            <NavMenu />
-            {children}
-          </main>
+          <UserProvider>
+            <main>
+              <NavMenu />
+              {children}
+            </main>
+          </UserProvider>
         </SessionProvider>
       </body>
     </html>
