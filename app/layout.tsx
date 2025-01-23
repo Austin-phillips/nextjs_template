@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "./context/SessionProvider";
 import { getServerSession } from "next-auth";
-import NavMenu from "@/app/ui/nav/NavMenu";
 import { UserProvider } from "./context/UserProvider";
 import NavBar from "./ui/nav/NavBar";
 

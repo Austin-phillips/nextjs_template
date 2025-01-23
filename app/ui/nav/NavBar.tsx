@@ -14,16 +14,14 @@ function classNames(...classes: string[]) {
 
 export default function NavBar() {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
-  const isAuthenticated = status === "authenticated";
+  const { status } = useSession();
   const { user } = useUser();
+  const isAuthenticated = status === "authenticated";
 
   const navigation = [
     { name: 'Discounts', href: '/' },
     ...(isAuthenticated ? [{ name: 'Orders', href: '/orders' }] : []),
   ]
-
-  console.log(user)
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
