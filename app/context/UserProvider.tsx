@@ -1,25 +1,19 @@
 "use client";
 
-import { getServerSession } from "next-auth";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { getCurrentUser } from "../lib/user/data";
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+import { User } from "@prisma/client";
 
 interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: Partial<User> | null;
+  setUser: (user: Partial<User> | null) => void;
   isLoading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Partial<User> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchUser = async () => {

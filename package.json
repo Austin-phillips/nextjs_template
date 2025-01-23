@@ -12,6 +12,8 @@
     "db:reset-and-seed": "node ./scripts/reset-db.js && npm run db:migrate:prod-deploy && node ./scripts/seed.js"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.2.1",
     "bcrypt": "^5.1.1",
     "next": "15.1.4",

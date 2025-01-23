@@ -30,9 +30,12 @@ export const authOptions = {
           return null;
         }
 
-        delete user.password;
+        const userWithoutPassword = {
+          ...user,
+          password: undefined,
+        };
 
-        return user;
+        return userWithoutPassword;
       },
     }),
   ],
