@@ -2,19 +2,21 @@
 
 import { useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
+import Loading from "@/app/ui/loading/loading";
 
 const protectedRoute = (WrappedComponent: React.ComponentType) => {
   return (props: any) => {
     const { status } = useSession();
 
     useEffect(() => {
-      if (status === "loading") {
-        return; // Do nothing while loading
-      }; // Do nothing while loading
       if (status === "unauthenticated") {
         signIn();
       }
     }, [status]);
+
+    if (status === "loading") {
+      return <Loading />; // Render nothing while loading
+    }
 
     return <WrappedComponent {...props} />;
   };
