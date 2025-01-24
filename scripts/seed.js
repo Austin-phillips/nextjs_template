@@ -9,7 +9,9 @@ async function seedDatabase() {
       data: {
         email: "test@test.com",
         password: hashedPassword,
-        name: "Austin",
+        first_name: "Austin",
+        last_name: "Smith",
+        phone: "1234567890",
       }
     })
     console.log('Database seeded successfully.');

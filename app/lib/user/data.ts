@@ -12,7 +12,9 @@ export async function getCurrentUser() {
       select: {
         id: true,
         email: true,
-        name: true,
+        first_name: true,
+        last_name: true,
+        phone: true,
         image: true,
       },
     });
