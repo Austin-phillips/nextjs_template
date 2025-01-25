@@ -2,7 +2,6 @@ import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import { signOut } from "next-auth/react";
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -74,6 +73,7 @@ export const authOptions = {
   },
   pages: {
     signOut: "/",
+    signIn: "/login",
   }
 };
 

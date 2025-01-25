@@ -34,8 +34,8 @@ export default async function RootLayout({
       >
         <SessionProvider session={session}>
           <UserProvider>
-            <main>
-              <NavBar />
+            <NavBar />
+            <main className="mt-16">
               {children}
             </main>
           </UserProvider>
