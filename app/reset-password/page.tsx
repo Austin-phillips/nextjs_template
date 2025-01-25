@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const [step, setStep] = useState(1);
@@ -17,25 +18,25 @@ export default function Page() {
     e.preventDefault();
     if (step === 1) {
       try {
-        const response = await axios.post('/api/user/reset-password', { email });
+        await axios.post('/api/user/reset-password', { email });
         setStep(2);
-        console.log(response);
+        toast.success("Code sent to email.");
       } catch (error) {
-        console.error(error);
+        toast.error("Invalid email. Please try again.");
       }
     } else if (step === 2) {
       try {
         await axios.post('/api/user/reset-password/verify', { email, code });
         setStep(3);
       } catch (error) {
-        console.log(error);
+        toast.error("Invalid code. Please try again.");
       }
     } else if (step === 3) {
       try {
         await axios.post('/api/user/reset-password/set-password', { email, password });
         router.push('/login');
       } catch (error) {
-        console.log(error);
+        toast.error("An unexpected error occurred.");
       }
     }
   };

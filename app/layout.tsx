@@ -5,6 +5,8 @@ import SessionProvider from "./context/SessionProvider";
 import { getServerSession } from "next-auth";
 import { UserProvider } from "./context/UserProvider";
 import NavBar from "./ui/nav/NavBar";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +42,7 @@ export default async function RootLayout({
             </main>
           </UserProvider>
         </SessionProvider>
+        <ToastContainer />
       </body>
     </html>
   );

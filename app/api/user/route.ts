@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { authenticatedUser } from '@/app/middlware/authMiddlware';
+import { formatPhoneNumber } from '@/app/utils/helperFunctions';
 
 // Define the schema for the expected data
 const userSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  phone: z.string().optional(),
+  phone: z.string().length(12, "Phone must be exactly 10 digits"),
 });
 
 export async function POST(req: Request) {
@@ -14,8 +15,28 @@ export async function POST(req: Request) {
     const userId = await authenticatedUser();
     const body = await req.json();
     // Validate the data using the schema
-    const validatedData = userSchema.parse(body);
-    const { firstName, lastName, phone } = validatedData;
+    const validatedData = userSchema.safeParse(body);
+    if (!validatedData.success) {
+      return Response.json({ errors: validatedData.error.flatten().fieldErrors }, { status: 400 });
+    }
+    const { firstName, lastName, phone } = validatedData.data;
+
+    const formattedPhone = formatPhoneNumber(phone);  
+
+    if (formattedPhone) {
+      const phoneExists = await prisma.user.findUnique({
+        where: {
+          phone: formattedPhone
+        },
+        select: {
+          id: true
+        }
+      });
+      if (phoneExists && phoneExists.id !== userId) {
+        return Response.json({ errors: { phone: 'Phone number already exists' } }, { status: 400 });
+      }
+    }
+
     await prisma.user.update({
       where: {
         id: userId
@@ -23,7 +44,7 @@ export async function POST(req: Request) {
       data: {
         first_name: firstName,
         last_name: lastName,
-        phone: phone
+        phone: formattedPhone
       }
     })
     return Response.json({ message: 'Data is valid' });

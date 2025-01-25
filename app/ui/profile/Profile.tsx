@@ -2,20 +2,44 @@
 
 import { useUser } from '@/app/context/UserProvider';
 import axios from 'axios';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Profile() {
   const { user, refreshUser } = useUser();
+  const [errors, setErrors] = useState<any>({});
+  const [phone, setPhone] = useState(user?.phone || "");
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    const formattedPhone = value
+      .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
+      .slice(0, 12); // Format and limit to 10 digits
+    setPhone(formattedPhone);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setErrors({});
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
     try {
-      await axios.post('/api/user', data);
-      console.log("SUCCESS");
+      await axios.post('/api/user', {
+        firstName: formData.get("firstName"),
+        lastName: formData.get("lastName"),
+        phone: phone,
+      });
+      toast.success('Profile updated');
       refreshUser();
     } catch (error) {
-      console.log("ERROR", error);
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        const errors = error.response.data.errors;
+        toast.error('Please fix the errors');
+        setErrors(errors);
+      } else {
+        toast.error('Something went wrong');
+      }
+    } finally {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -45,6 +69,7 @@ export default function Profile() {
                   className="block w-full rounded-md bg-gray-700 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-gray-600 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
+              {errors?.firstName && <p className="text-red-500 text-sm/6">{errors.firstName}</p>}
             </div>
 
             <div className="sm:col-span-3">
@@ -61,6 +86,7 @@ export default function Profile() {
                   className="block w-full rounded-md bg-gray-700 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-gray-600 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
+              {errors?.lastName && <p className="text-red-500 text-sm/6">{errors.lastName}</p>}
             </div>
 
             <div className="sm:col-span-full">
@@ -86,10 +112,12 @@ export default function Profile() {
                   name="phone"
                   type="phone"
                   autoComplete="phone"
-                  defaultValue={user?.phone || ''}
+                  value={phone}
+                  onChange={handlePhoneChange}
                   className="block w-full rounded-md bg-gray-700 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-gray-600 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
+              {errors?.phone && <p className="text-red-500 text-sm/6">{errors.phone}</p>}
             </div>
           </div>
         </div>
@@ -191,9 +219,6 @@ export default function Profile() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm/6 font-semibold text-white">
-          Cancel
-        </button>
         <button
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

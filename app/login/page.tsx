@@ -2,18 +2,33 @@
 
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Page() {
+  const [errors, setErrors] = useState<any>("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors("");
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    signIn("credentials", { email, password, redirect: true, callbackUrl: "/" });
+    
+    signIn("credentials", { email, password, redirect: false })
+      .then((result) => {
+        if (result?.error) {
+          setErrors("Incorrect email or password. Please try again.");
+        } else {
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => {
+        setErrors("An unexpected error occurred.");
+      });
   };
 
   return (
       <form onSubmit={handleSubmit} className="space-y-2 h-full">
+        {errors && <p className="text-red-500 text-sm/6">{errors}</p>}
         <div>
           <label htmlFor="email" className="block text-sm/6 font-medium text-white">
             Email address
