@@ -2,7 +2,8 @@
 
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-export default function LoginPage() {
+
+export default function Page() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
@@ -45,6 +46,11 @@ export default function LoginPage() {
           <div className="mt-1 text-center">
             <Link href="/reset-password" className="text-sm/6 text-indigo-600">
               Forgot password?
+            </Link>
+          </div>
+          <div className="mt-1 text-center">
+            <Link href="/register" className="text-sm/6 text-indigo-600">
+              Create an account
             </Link>
           </div>
         </div>

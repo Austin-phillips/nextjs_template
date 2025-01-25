@@ -8,8 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate:create": "bash ./scripts/db-migrate-create.sh",
+    "db:migrate:dev": "prisma migrate dev",
     "db:migrate:prod-deploy": "prisma migrate deploy",
-    "db:reset-and-seed": "node ./scripts/reset-db.js && npm run db:migrate:prod-deploy && node ./scripts/seed.js"
+    "db:reset-and-seed": "node ./scripts/reset-db.js && npm run db:migrate:prod-deploy && node ./scripts/seed.js",
+    "db:prisma-generate": "prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -19,6 +21,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "luxon": "^3.5.0",
     "next": "15.1.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
@@ -30,6 +33,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/forms": "^0.5.10",
     "@types/bcrypt": "^5.0.2",
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

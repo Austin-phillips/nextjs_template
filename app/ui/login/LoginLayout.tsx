@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen flex-1 flex-col justify-start pt-24 bg-gray-800 text-white">
+    <div className="flex h-screen flex-1 flex-col justify-start pt-36 bg-gray-800 text-white">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           alt="Your Company"

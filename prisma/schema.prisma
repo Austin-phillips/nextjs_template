@@ -12,9 +12,18 @@ model User {
   email      String  @unique
   first_name String?
   last_name  String?
-  phone      String?
+  phone      String? @unique
   password   String
   image      String?
 
   @@map("users")
+}
+
+model ResetPasswordToken {
+  id         String  @id @default(uuid())
+  email      String  @unique
+  token      Int
+  expires_at Int
+
+  @@map("reset_password_tokens")
 }

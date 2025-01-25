@@ -1,8 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
@@ -11,6 +11,7 @@ export default function Page() {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function Page() {
     } else if (step === 3) {
       try {
         await axios.post('/api/user/reset-password/set-password', { email, password });
-        signIn('credentials', { email, password, callbackUrl: '/' });
+        router.push('/login');
       } catch (error) {
         console.log(error);
       }
@@ -108,7 +109,7 @@ export default function Page() {
                   name="password"
                   type="password"
                   required
-                  autoComplete="password"
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full rounded-md bg-gray-700 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-gray-600 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -125,7 +126,7 @@ export default function Page() {
                   name="confirm-password"
                   type="password"
                   required
-                  autoComplete="confirm-password"
+                  autoComplete="new-password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="block w-full rounded-md bg-gray-700 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-gray-600 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -134,11 +135,16 @@ export default function Page() {
             </div>
           </>
         )}
+        <div className="mt-1 text-center">
+          <Link href="/login" className="text-sm/6 text-indigo-600">
+            Back to login
+          </Link>
+        </div>
         <div>
           <button
             type="submit"
             disabled={buttonDisabled()}
-            className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 ${buttonDisabled() ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600'}`}
+            className={`flex w-full mt-4 justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 ${buttonDisabled() ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600'}`}
           >
             {buttonText()}
           </button>

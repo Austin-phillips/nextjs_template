@@ -17,6 +17,7 @@ export async function POST(req: Request) {
       where: { email },
       data: { password: hashedPassword }
     });
+    await prisma.resetPasswordToken.deleteMany({ where: { email } });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Failed to update password' }, { status: 500 });
