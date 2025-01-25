@@ -20,8 +20,8 @@ export default function Profile() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 text-white w-full p-16">
-      <div className="space-y-12">
+    <form onSubmit={handleSubmit} className="bg-gray-800 text-white w-full p-16 h-full">
+      <div className="space-y-12 h-full overflow-scroll">
         <div className="border-b border-gray-700 pb-12">
           <h2 className="text-base/7 font-semibold text-white">Profile</h2>
         </div>

@@ -35,7 +35,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <UserProvider>
             <NavBar />
-            <main className="mt-16">
+            <main className="overflow-hidden">
               {children}
             </main>
           </UserProvider>
